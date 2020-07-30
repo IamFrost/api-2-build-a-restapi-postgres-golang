@@ -389,7 +389,7 @@ func GetPurchase(w http.ResponseWriter, r *http.Request) {
 		log.Fatalf("Unable to convert the string into int.  %v", err)
 	}
 
-	rows := db.QueryRow(`SELECT * FROM logins WHERE item_id=$1`, id)
+	rows := db.QueryRow(`SELECT * FROM purchases WHERE item_id=$1`, id)
 
 	var col1 string
 	var col2 string
