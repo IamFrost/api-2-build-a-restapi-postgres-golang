@@ -80,6 +80,10 @@ func GetOneUsersec(w http.ResponseWriter, r *http.Request) {
 
 	parameters := mux.Vars(r)
 
+	if len(parameters["userid"]) == 0 {
+		parameters["userid"] = ""
+	}
+
 	rows, err := db.Query(`SELECT * FROM usersec where userid = $1`, parameters["userid"])
 	if err != nil {
 		panic(err)
@@ -228,6 +232,11 @@ func GetLogin1(w http.ResponseWriter, r *http.Request) {
 	// get the postid from the request params, key is "id"
 	params := mux.Vars(r)
 
+	// do it other query generates error lack of parameters
+	if len(params["id"]) == 0 {
+		params["id"] = ""
+	}
+
 	// convert the id type from string to int
 	// id, err := strconv.Atoi(params["id"])
 
@@ -263,6 +272,11 @@ func GetLogin2(w http.ResponseWriter, r *http.Request) {
 
 	// get the postid from the request params, key is "id"
 	params := mux.Vars(r)
+
+	// do it other query generates error lack of parameters
+	if len(params["id"]) == 0 {
+		params["id"] = ""
+	}
 
 	// convert the id type from string to int
 	// id, err := strconv.Atoi(params["id"])
@@ -381,6 +395,11 @@ func GetPurchase(w http.ResponseWriter, r *http.Request) {
 
 	// get the postid from the request params, key is "id"
 	params := mux.Vars(r)
+
+	// if len(params["id"]) == 0 {
+	// 	params["id"] = "0"
+	// }
+	
 
 	// convert the id type from string to int
 	id, err := strconv.Atoi(params["id"])
@@ -533,15 +552,11 @@ func main() {
 	r.HandleFunc("/usersec", UpdateOneUsersec).Methods("PUT")
 	r.HandleFunc("/usersec/{userid}", DeleteOneUsersecAllAccess).Methods("DELETE")
 
-
-
 	r.HandleFunc("/logins", GetLogins).Methods("GET")
 	r.HandleFunc("/logins/1/{id}", GetLogin1).Methods("GET")
 	r.HandleFunc("/logins/2/{id}", GetLogin2).Methods("GET")
 	r.HandleFunc("/logins", CreateLogin).Methods("POST")
 
-
-	
 	r.HandleFunc("/purchases", GetPurchases).Methods("GET")
 	r.HandleFunc("/purchases/{id}", GetPurchase).Methods("GET")
 	r.HandleFunc("/purchases", CreatePurchase).Methods("POST")
